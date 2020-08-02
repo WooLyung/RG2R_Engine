@@ -26,9 +26,15 @@ Scene::~Scene()
 	delete mainCamera;
 }
 
+void Scene::DestroyObject(Object* obj)
+{
+	destroyed.push_back(obj);
+}
+
 void Scene::Update()
 {
-	for (auto iter : objects)
+	vector<Object*> updateObject = objects;
+	for (auto iter : updateObject)
 	{
 		if (iter->GetIsEnable())
 		{
@@ -61,6 +67,22 @@ void Scene::Update()
 	{
 		iter->Update();
 	}
+
+	for (auto& iter : destroyed)
+	{
+		for (auto iter2 = objects.begin(); iter2 != objects.end(); iter2++)
+		{
+			if (*iter2 == iter)
+			{
+				objects.erase(iter2);
+				break;
+			}
+		}
+
+		iter->OnDestroy();
+		delete iter;
+	}
+	destroyed.clear();
 }
 
 void Scene::Render()

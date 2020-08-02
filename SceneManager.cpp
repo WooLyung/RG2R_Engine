@@ -2,10 +2,18 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Engine.h"
+#include "SpriteRenderer.h"
 
 Scene* SceneManager::FirstScene()
 {
-	return new Scene;
+	ShowCursor(false);
+	auto obj = new Object;
+	obj->AttachComponent<SpriteRenderer>()
+		->SetTexture("Resources/Sprites/test.png");
+	auto scene = new Scene();
+	scene->AttachObject(obj);
+
+	return scene;
 }
 
 SceneManager::SceneManager()
@@ -31,6 +39,38 @@ SceneManager::~SceneManager()
 
 void SceneManager::Update()
 {
+	if (nextScene != nullptr)
+	{
+		Scene* preScene = registeredScene;
+		registeredScene = nextScene;
+		nextScene = nullptr;
+
+		if (preScene != nullptr)
+		{
+			preScene->state = SceneState::SCENE_UNREGISTERED;
+			ApplyListener(preScene->onFinishListener);
+			preScene->OnFinish();
+		}
+
+		registeredScene->state = SceneState::SCENE_START;
+		if (registeredScene->GetIsFirstRegister())
+		{
+			ApplyListener(registeredScene->onFirstRegisterListener);
+			registeredScene->OnFirstRegister();
+
+			registeredScene->isFirstRegister = false;
+		}
+		ApplyListener(registeredScene->onRegisterListener);
+		registeredScene->OnRegister();
+	}
+
+	for (int i = 0; i < deletedScenes->size(); i++)
+	{
+		delete deletedScenes->operator[](i);
+	}
+
+	deletedScenes->clear();
+
 	if (registeredScene != nullptr)
 	{
 		if (registeredScene->GetIsFirstUpdate())
@@ -58,43 +98,13 @@ void SceneManager::Update()
 
 		registeredScene->state = SceneState::SCENE_ALIVE;
 	}
-
-	if (nextScene != nullptr)
-	{
-		Scene* preScene = registeredScene;
-		registeredScene = nextScene;
-		nextScene = nullptr;
-
-		if (preScene != nullptr)
-		{
-			preScene->state = SceneState::SCENE_UNREGISTERED;
-			ApplyListener(preScene->onFinishListener);
-			preScene->OnFinish();
-		}
-
-		registeredScene->state = SceneState::SCENE_START;
-		if (registeredScene->GetIsFirstRegister())
-		{
-			ApplyListener(registeredScene->onFirstRegisterListener);
-			registeredScene->OnFirstRegister();
-
-			registeredScene->isFirstRegister = false;
-		}
-		ApplyListener(registeredScene->onRegisterListener);
-		registeredScene->OnRegister();
-	}
-
-	for (int i = 0; i < deletedScenes->size(); i++)
-		delete deletedScenes->operator[](i);
-		
-	deletedScenes->clear();
 }
 
 void SceneManager::Render()
 {
 	if (registeredScene != nullptr)
 	{
-		if (registeredScene->GetIsFirstRender()) 
+		if (registeredScene->GetIsFirstRender())
 		{
 			ApplyListener(registeredScene->onFirstRenderBeforeListener);
 			registeredScene->OnFirstRenderBefore();
@@ -125,10 +135,10 @@ void SceneManager::Render(ViewRenderData& viewRenderData)
 }
 
 Scene* SceneManager::ChangeScene(Scene* newScene)
-{	
+{
 	nextScene = newScene;
 
-	return registeredScene;
+	return nextScene;
 }
 
 Scene* SceneManager::ChangeScene(Scene* newScene, bool isDelete)
@@ -137,7 +147,7 @@ Scene* SceneManager::ChangeScene(Scene* newScene, bool isDelete)
 	if (isDelete)
 		deletedScenes->push_back(registeredScene);
 
-	return registeredScene;
+	return nextScene;
 }
 
 Scene* SceneManager::ChangeScene(Scene* newScene, void* data)
@@ -145,7 +155,7 @@ Scene* SceneManager::ChangeScene(Scene* newScene, void* data)
 	nextScene = newScene;
 	this->data = data;
 
-	return registeredScene;
+	return nextScene;
 }
 
 Scene* SceneManager::ChangeScene(Scene* newScene, bool isDelete, void* data)
@@ -155,7 +165,7 @@ Scene* SceneManager::ChangeScene(Scene* newScene, bool isDelete, void* data)
 	if (isDelete)
 		deletedScenes->push_back(registeredScene);
 
-	return registeredScene;
+	return nextScene;
 }
 
 Scene* SceneManager::DeleteScene(Scene* scene)

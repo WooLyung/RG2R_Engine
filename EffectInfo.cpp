@@ -56,12 +56,12 @@ Color ColorMatrixEffectInfo::GetColor()
 
 #pragma region DiscreteTransferEffectInfo
 DiscreteTransferEffectInfo::DiscreteTransferEffectInfo()
-:redTable{0,0,0.5,1,1},greenTable{ 0,0,0.5,1,1 }, blueTable{ 0,0,0.5,1,1 }, alphaTable{ 0,0,0.5,1,1 }
+	:redTable{ 0,0,0.5,1,1 }, greenTable{ 0,0,0.5,1,1 }, blueTable{ 0,0,0.5,1,1 }, alphaTable{ 0,0,0.5,1,1 }
 {
 }
 
 DiscreteTransferEffectInfo::DiscreteTransferEffectInfo(float r1, float r2, float r3, float r4, float r5, float g1, float g2, float g3, float g4, float g5, float b1, float b2, float b3, float b4, float b5, float a1, float a2, float a3, float a4, float a5)
-:redTable{ r1,r2,r3,r4,r5 }, greenTable{ g1,g2,g3,g4,g5 }, blueTable{ b1,b2,b3,b4,b5 }, alphaTable{ a1,a2,a3,a4,a5 }
+	: redTable{ r1,r2,r3,r4,r5 }, greenTable{ g1,g2,g3,g4,g5 }, blueTable{ b1,b2,b3,b4,b5 }, alphaTable{ a1,a2,a3,a4,a5 }
 {
 }
 
@@ -88,7 +88,7 @@ ID2D1Image * DiscreteTransferEffectInfo::GetOutputImage(ID2D1Image * input)
 
 #pragma region GammaTransferEffectInfo
 GammaTransferEffectInfo::GammaTransferEffectInfo()
-	:redAmplitude(1.f),redExponent(1.f),redOffset(0.f),
+	:redAmplitude(1.f), redExponent(1.f), redOffset(0.f),
 	greenAmplitude(1.f), greenExponent(1.f), greenOffset(0.f),
 	blueAmplitude(1.f), blueExponent(1.f), blueOffset(0.f),
 	alphaAmplitude(1.f), alphaExponent(1.f), alphaOffset(0.f)
@@ -112,17 +112,17 @@ ID2D1Image * GammaTransferEffectInfo::GetOutputImage(ID2D1Image * input)
 	auto e = RG2R_GraphicM->GetEffect(ET_GammaTransfer);
 	e->SetInput(0, input);
 	e->SetValue(D2D1_GAMMATRANSFER_PROP_RED_AMPLITUDE, redAmplitude);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_RED_EXPONENT , redExponent);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_RED_OFFSET   , redOffset);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_RED_EXPONENT, redExponent);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_RED_OFFSET, redOffset);
 	e->SetValue(D2D1_GAMMATRANSFER_PROP_GREEN_AMPLITUDE, greenAmplitude);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_GREEN_EXPONENT , greenExponent);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_GREEN_OFFSET   , greenOffset);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_GREEN_EXPONENT, greenExponent);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_GREEN_OFFSET, greenOffset);
 	e->SetValue(D2D1_GAMMATRANSFER_PROP_BLUE_AMPLITUDE, blueAmplitude);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_BLUE_EXPONENT , blueExponent);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_BLUE_OFFSET   , blueOffset);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_BLUE_EXPONENT, blueExponent);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_BLUE_OFFSET, blueOffset);
 	e->SetValue(D2D1_GAMMATRANSFER_PROP_ALPHA_AMPLITUDE, alphaAmplitude);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_ALPHA_EXPONENT , alphaExponent);
-	e->SetValue(D2D1_GAMMATRANSFER_PROP_ALPHA_OFFSET   , alphaOffset);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_ALPHA_EXPONENT, alphaExponent);
+	e->SetValue(D2D1_GAMMATRANSFER_PROP_ALPHA_OFFSET, alphaOffset);
 	ID2D1Image* output;
 	e->GetOutput(&output);
 	return output;
@@ -143,7 +143,7 @@ ID2D1Image * HueRotationEffectInfo::GetOutputImage(ID2D1Image * input)
 {
 	auto e = RG2R_GraphicM->GetEffect(ET_HueRotation);
 	e->SetInput(0, input);
-	e->SetValue(D2D1_HUEROTATION_PROP_ANGLE,angle);
+	e->SetValue(D2D1_HUEROTATION_PROP_ANGLE, angle);
 	ID2D1Image* output;
 	e->GetOutput(&output);
 	return output;
@@ -266,4 +266,68 @@ ID2D1Image * MorphologyEffectInfo::GetOutputImage(ID2D1Image * input)
 	e->GetOutput(&output);
 	return output;
 }
+
+TDRotationEffectInfo::TDRotationEffectInfo(D2D1_VECTOR_3F vec)
+{
+	this->vec = vec;
+}
+
+TDRotationEffectInfo::~TDRotationEffectInfo()
+{
+
+}
+
+ID2D1Image* TDRotationEffectInfo::GetOutputImage(ID2D1Image* input)
+{
+	auto e = RG2R_GraphicM->GetEffect(ET_3DPerspectiveTransform);
+	e->SetInput(0, input);
+	e->SetValue(D2D1_3DPERSPECTIVETRANSFORM_PROP_ROTATION, vec);
+
+	ID2D1Image* output;
+	e->GetOutput(&output);
+	return output;
+}
+
+BrightnessEffectInfo::BrightnessEffectInfo(float whiteStart, float whiteEnd, float blackStart, float blackEnd)
+	: whiteStart(whiteStart), blackStart(blackStart), whiteEnd(whiteEnd), blackEnd(blackEnd)
+{
+
+}
+
+BrightnessEffectInfo::~BrightnessEffectInfo()
+{
+
+}
+
+ID2D1Image* BrightnessEffectInfo::GetOutputImage(ID2D1Image* input)
+{
+	auto e = RG2R_GraphicM->GetEffect(ET_Brightness);
+	e->SetInput(0, input);
+	e->SetValue(D2D1_BRIGHTNESS_PROP_BLACK_POINT, D2D1::Vector2F(blackStart, blackEnd));
+	e->SetValue(D2D1_BRIGHTNESS_PROP_WHITE_POINT, D2D1::Vector2F(whiteStart, whiteEnd));
+
+	ID2D1Image* output;
+	e->GetOutput(&output);
+	return output;
+}
+
+GaussianBlurEffectInfo::GaussianBlurEffectInfo(float level)
+	: level(level) {}
+
+GaussianBlurEffectInfo::~GaussianBlurEffectInfo()
+{
+
+}
+
+ID2D1Image* GaussianBlurEffectInfo::GetOutputImage(ID2D1Image* input)
+{
+	auto e = RG2R_GraphicM->GetEffect(ET_GaussianBlur);
+	e->SetInput(0, input);
+	e->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, level);
+
+	ID2D1Image* output;
+	e->GetOutput(&output);
+	return output;
+}
+
 #pragma endregion

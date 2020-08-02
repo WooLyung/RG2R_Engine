@@ -35,7 +35,7 @@ TextRenderData::TextRenderData()
 		RG2R_GraphicM->GetDeviceContext()->GetSize().height,
 		&layout);
 
-	 textRange = { 0, Widen(text).length() };
+	textRange = { 0, Widen(text).length() };
 }
 
 TextRenderData::~TextRenderData()

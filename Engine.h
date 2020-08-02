@@ -32,7 +32,7 @@ private:
 
 public:
 	~Engine();
-	
+
 	static Engine* GetInstance();
 
 	void Init();

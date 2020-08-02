@@ -10,7 +10,7 @@ TextureManager::TextureManager()
 	//wic factory를 생성한다.
 	HR(
 		CoCreateInstance(CLSID_WICImagingFactory, NULL,
-		CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory_ ))
+			CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory_))
 	);
 }
 
@@ -42,7 +42,7 @@ void TextureManager::Unload(const std::string & path)
 }
 
 void TextureManager::LoadAll(const std::string & rootPath, int fl)
-{	
+{
 	for (recursive_directory_iterator iter(rootPath); iter != recursive_directory_iterator(); ++iter)
 	{
 		if (iter->path().extension() == ".png" ||

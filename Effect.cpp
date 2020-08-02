@@ -18,10 +18,21 @@ Effect* Effect::PushEffectInfo(EffectInfo * effectInfo)
 	return this;
 }
 
+Effect* Effect::ClearEffectInfo()
+{
+	for (auto& iter : effects_)
+	{
+		delete iter;
+	}
+	effects_.clear();
+	return this;
+}
+
 Effect* Effect::PopEffectInfo()
 {
 	delete effects_.back();
 	effects_.pop_back();
+
 	return this;
 }
 
@@ -32,7 +43,7 @@ ID2D1Image* Effect::GetOutputImage(ID2D1Image * input)
 
 	for (auto i : effects_)
 		input = i->GetOutputImage(input);
-	
+
 	return input;
 }
 

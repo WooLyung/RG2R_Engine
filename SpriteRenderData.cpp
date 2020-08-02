@@ -34,6 +34,15 @@ SpriteRenderData* SpriteRenderData::SetTexture(const std::string& path)
 	return this;
 }
 
+SpriteRenderData* SpriteRenderData::SetTexture(Texture* texture)
+{
+	this->texture = texture;
+	visibleArea = Rect(0.f, 0.f, texture->GetSize().width, texture->GetSize().height);
+	realArea = Rect(0.f, 0.f, texture->GetSize().width, texture->GetSize().height);
+
+	return this;
+}
+
 SpriteRenderData* SpriteRenderData::SetVisibleArea(Rect rect)
 {
 	visibleArea = rect;
@@ -75,27 +84,27 @@ SpriteRenderData* SpriteRenderData::SetEnlargementType(EnlargementType type)
 {
 	switch (type)
 	{
-		case EnlargementType::ANISOTROPIC:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_ANISOTROPIC;
-			break;
-		case EnlargementType::CUBIC:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_CUBIC;
-			break;
-		case EnlargementType::FORCE_DWORD:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_FORCE_DWORD;
-			break;
-		case EnlargementType::HIGH_QUALITY_CUBIC:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_HIGH_QUALITY_CUBIC;
-			break;
-		case EnlargementType::LINEAR:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_LINEAR;
-			break;
-		case EnlargementType::MULTI_SAMPLE_LINEAR:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR;
-			break;
-		case EnlargementType::PIXEL:
-			enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
-			break;
+	case EnlargementType::ANISOTROPIC:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_ANISOTROPIC;
+		break;
+	case EnlargementType::CUBIC:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_CUBIC;
+		break;
+	case EnlargementType::FORCE_DWORD:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_FORCE_DWORD;
+		break;
+	case EnlargementType::HIGH_QUALITY_CUBIC:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_HIGH_QUALITY_CUBIC;
+		break;
+	case EnlargementType::LINEAR:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_LINEAR;
+		break;
+	case EnlargementType::MULTI_SAMPLE_LINEAR:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_MULTI_SAMPLE_LINEAR;
+		break;
+	case EnlargementType::PIXEL:
+		enlargementType = D2D1_INTERPOLATION_MODE::D2D1_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
+		break;
 	}
 
 	return this;

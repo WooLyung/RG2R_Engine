@@ -41,7 +41,7 @@ Rect BitmapRenderData::GetVisibleArea()
 BitmapRenderData* BitmapRenderData::SetBitmap(ID2D1Bitmap1* bitmap)
 {
 	this->bitmap = bitmap;
-	
+
 	return this;
 }
 

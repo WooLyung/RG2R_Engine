@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Transform.h"
 #include "Settings.h"
+#include "Engine.h"
 
 Object::Object()
 {
@@ -10,14 +11,15 @@ Object::Object()
 
 Object::~Object()
 {
-	DetachParent();
-
 	ApplyListener(onDestroyListener);
 	OnDestroy();
 
-	for (auto iter : childs)
+	if (childs.size() > 0)
 	{
-		delete iter;
+		for (auto iter : childs)
+		{
+			delete iter;
+		}
 	}
 	for (auto iter : commandLists)
 	{
@@ -610,6 +612,11 @@ bool Object::IsParent(Object* object)
 void Object::Destroy()
 {
 	state = OBJ_DESTROY;
+	DetachParent();
+	RG2R_SceneM->GetScene()->DestroyObject(this);
+
+	for (auto& child : childs)
+		child->Destroy();
 }
 
 bool Object::GetIsEnable()

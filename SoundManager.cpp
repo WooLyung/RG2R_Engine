@@ -245,7 +245,7 @@ SoundCode SoundManager::Play(const path& filePath)
 
 		return code;
 	}
-	
+
 	return -1;
 }
 
@@ -254,6 +254,8 @@ SoundCode SoundManager::Play(const path& filePath, SoundOptions soundOptions)
 	if (dsound_ != nullptr)
 	{
 		Load(filePath);
+
+		std::cout << "WOW" << std::endl;
 
 		SoundCode code = -1, nowCode = 0;
 		Sound* sound;

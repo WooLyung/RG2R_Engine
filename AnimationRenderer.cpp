@@ -138,7 +138,7 @@ void AnimationRenderer::Draw(ViewRenderData& viewRenderData)
 		if (effect != nullptr)
 		{
 			ID2D1Image* image = effect->GetOutputImage(defaultData.GetAnimations()->operator[](defaultData.GetTargetAnim()).GetTexture(defaultData.GetNowIndex())->GetBitmap());
-			
+
 			RG2R_GraphicM->GetDeviceContext()->DrawImage(
 				image,
 				nullptr,

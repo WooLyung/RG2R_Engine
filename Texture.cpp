@@ -19,7 +19,7 @@ Texture::Texture(const std::string& path)
 	HR(
 		decoder->GetFrame(0, &frame)
 	);
-	
+
 	IWICFormatConverter* convertedSrcBmp = nullptr;
 	HR(
 		RG2R_TextureM->wicFactory_->CreateFormatConverter(
@@ -37,7 +37,7 @@ Texture::Texture(const std::string& path)
 			WICBitmapPaletteTypeCustom
 		)
 	);
-	
+
 	HR(
 		RG2R_GraphicM->GetDeviceContext()->CreateBitmapFromWicBitmap(
 			convertedSrcBmp,
