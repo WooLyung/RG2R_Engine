@@ -3,15 +3,20 @@
 #include "Scene.h"
 #include "Engine.h"
 #include "SpriteRenderer.h"
+#include <iostream>
 
 Scene* SceneManager::FirstScene()
 {
 	ShowCursor(false);
-	auto obj = new Object;
-	obj->AttachComponent<SpriteRenderer>()
-		->SetTexture("Resources/Sprites/test.png");
+	auto obj1 = new Object;
+	obj1->onUpdateBeforeListener = []() { std::cout << "1 업데이트 전" << std::endl; };
+	obj1->onUpdateListener = []() { std::cout << "1 업데이트" << std::endl; };
+	auto obj2 = new Object;
+	obj2->onUpdateBeforeListener = []() { std::cout << "2 업데이트 전" << std::endl; };
+	obj2->onUpdateListener = []() { std::cout << "2 업데이트" << std::endl; };
 	auto scene = new Scene();
-	scene->AttachObject(obj);
+	scene->AttachObject(obj1);
+	scene->AttachObject(obj2);
 
 	return scene;
 }
@@ -73,6 +78,8 @@ void SceneManager::Update()
 
 	if (registeredScene != nullptr)
 	{
+		registeredScene->UpdateBefore();
+
 		if (registeredScene->GetIsFirstUpdate())
 		{
 			ApplyListener(registeredScene->onStartListener);

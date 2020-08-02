@@ -150,6 +150,28 @@ void Object::Render(ViewRenderData& viewRenderData)
 	}
 }
 
+void Object::UpdateBefore()
+{
+	for (auto iter : childs)
+	{
+		if (iter->GetIsEnable())
+		{
+			iter->UpdateBefore();
+
+			if (iter->isFirstUpdate)
+			{
+				ApplyListener(iter->onStartListener);
+				iter->OnStart();
+
+				ApplyListener(iter->onFirstUpdateBeforeListener);
+				iter->OnFirstUpdateBefore();
+			}
+			ApplyListener(iter->onUpdateBeforeListener);
+			iter->OnUpdateBefore();
+		}
+	}
+}
+
 void Object::Update()
 {
 	for (auto iter : commandLists)
@@ -161,17 +183,6 @@ void Object::Update()
 	{
 		if (iter.second->GetIsEnable())
 		{
-			if (iter.second->GetIsFirstUpdate())
-			{
-				ApplyListener(iter.second->onStartListener);
-				iter.second->OnStart();
-
-				ApplyListener(iter.second->onFirstUpdateBeforeListener);
-				iter.second->OnFirstUpdateBefore();
-			}
-			ApplyListener(iter.second->onFirstUpdateBeforeListener);
-			iter.second->OnFirstUpdateBefore();
-
 			iter.second->Update();
 
 			if (iter.second->GetIsFirstUpdate())

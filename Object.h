@@ -29,6 +29,7 @@ private:
 	void Render();
 	void Render(ViewRenderData&);
 	void Update();
+	void UpdateBefore();
 
 	Matrix matrix, matrix_v;
 	Matrix anchor_matrix, anchor_matrix_v;

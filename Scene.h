@@ -23,6 +23,7 @@ private:
 	void Render(); // 렌더링
 	void Render(ViewRenderData&);
 	void Update(); // 업데이트
+	void UpdateBefore(); // 업데이트 전
 
 	std::vector<Object*> objects; // 씬 안의 오브젝트
 	std::vector<Object*> destroyed; // 삭제될 오브젝트

@@ -31,13 +31,15 @@ void Scene::DestroyObject(Object* obj)
 	destroyed.push_back(obj);
 }
 
-void Scene::Update()
+void Scene::UpdateBefore()
 {
 	vector<Object*> updateObject = objects;
 	for (auto iter : updateObject)
 	{
 		if (iter->GetIsEnable())
 		{
+			iter->UpdateBefore();
+
 			if (iter->isFirstUpdate)
 			{
 				ApplyListener(iter->onStartListener);
@@ -48,7 +50,17 @@ void Scene::Update()
 			}
 			ApplyListener(iter->onUpdateBeforeListener);
 			iter->OnUpdateBefore();
+		}
+	}
+}
 
+void Scene::Update()
+{
+	vector<Object*> updateObject = objects;
+	for (auto iter : updateObject)
+	{
+		if (iter->GetIsEnable())
+		{
 			iter->Update();
 
 			if (iter->isFirstUpdate)
