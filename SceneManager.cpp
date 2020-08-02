@@ -7,18 +7,7 @@
 
 Scene* SceneManager::FirstScene()
 {
-	ShowCursor(false);
-	auto obj1 = new Object;
-	obj1->onUpdateBeforeListener = []() { std::cout << "1 업데이트 전" << std::endl; };
-	obj1->onUpdateListener = []() { std::cout << "1 업데이트" << std::endl; };
-	auto obj2 = new Object;
-	obj2->onUpdateBeforeListener = []() { std::cout << "2 업데이트 전" << std::endl; };
-	obj2->onUpdateListener = []() { std::cout << "2 업데이트" << std::endl; };
-	auto scene = new Scene();
-	scene->AttachObject(obj1);
-	scene->AttachObject(obj2);
-
-	return scene;
+	return nullptr;
 }
 
 SceneManager::SceneManager()
